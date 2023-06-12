@@ -13,6 +13,9 @@ class Team(models.Model):
     # Team <-> User N:M
     users = models.ManyToManyField(User, blank=True)   # null=True를 설정필요없음
 
+    # Team <-> User N:1
+    admin = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE, related_name='admin_teams')
+
     def __str__(self):
         return f'[{self.pk}] - {self.title}'
 
