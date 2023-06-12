@@ -24,6 +24,7 @@ urlpatterns = [
     path('markdownx/', include('markdownx.urls')),
     # path("brain/", include('brainservice.urls')),
     path('main/', include('mainservice.urls')),
+    path('accounts/', include('allauth.urls')),
     path('', include('mainservice.urls')),
 ]
 
