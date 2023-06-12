@@ -6,11 +6,26 @@
             <div class="col-md-12 col-lg-12">
                 <h1>Invite</h1>
                 <br>
-
+                {% if user.is_authenticated %}
+                    <a class="btn btn-primary btn-sm float-right" href="/main/create_invite/" role="botton">
+                    <i class="fas fa-pen"></i>Make New Invite!!</a>
+                {% endif %}
                 <br>
                 <hr>
                 <div class="card mb-4">
-                    Main Area
+                    보낸 초대
+                    {% for from_inv in from_invite %}
+                        <p>{{ from_inv.inviting_info }}</p>
+                    {% empty %}
+                        <p>보낸 초대가 없습니다.</p>
+                    {% endfor %}
+
+                    받은 초대
+                    {% for to_inv in to_invite %}
+                        <p>{{ to_inv.inviting_info }}</p>
+                    {% empty %}
+                        <p>받은 초대가 없습니다.</p>
+                    {% endfor %}
                 </div>
 
             </div>
