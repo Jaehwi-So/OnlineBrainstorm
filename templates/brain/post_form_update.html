@@ -1,0 +1,25 @@
+{% extends 'brain/brain-base.html' %}
+{% load crispy_forms_tags %}
+
+{% block main_brain_area %}
+    <div class="container my-3">
+        <div class="row">
+            <div class="col-md-12 col-lg-12">
+                <h1  style="text-align:center">Update New Post</h1><hr>
+                <form method="post" enctype="multipart/form-data" style="padding:3%">
+                    {% csrf_token %}
+                    <table style="margin:auto">
+                        {{ form | crispy }}
+                    </table>
+                    <br><hr><br>
+                    <div style="margin:auto; text-align:center">
+                        <button type="submit" class="btn btn-primary" >Submit</button>
+                    </div>
+                </form>
+                {{ form.media }}
+                <hr>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

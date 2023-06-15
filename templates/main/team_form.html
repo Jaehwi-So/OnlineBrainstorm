@@ -1,17 +1,22 @@
 {% extends 'main/base.html' %}
+{% load crispy_forms_tags %}
 
 {% block main_area %}
-    <h1>Create New Team</h1><hr>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <table style="margin:auto">
-            {{ form }}
-            <tr>
-                <td><button type="submit" class="btn btn-primary">등록</button></td>
-            </tr>
-        </table>
+    <div class="container my-3">
+        <div class="row">
+            <div class="col-md-12 col-lg-12" >
+                <h1>Create New Team</h1><hr>
+                <form method="post" enctype="multipart/form-data" >
+                    {% csrf_token %}
+                    {{ form | crispy }}
+                    <br><hr><br>
+                    <div style="margin:auto; text-align:center">
+                        <button type="submit" class="btn btn-primary" >Submit</button>
+                    </div>
+                </form>
+                <hr>
+            </div>
+        </div>
+    </div>
 
-
-    </form>
-    <hr>
 {% endblock %}

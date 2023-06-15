@@ -1,11 +1,15 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Avg
 from markdownx.models import MarkdownxField
+from markdownx.utils import markdown
 
 
 # 팀
 class Team(models.Model):
     title = models.CharField(max_length=50, null=False)
+    thumbnail = models.ImageField(upload_to='brainservice/images/%Y/%m/%d/', blank=True, null=True)
+    disc = models.CharField(max_length=200, null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -20,7 +24,9 @@ class Team(models.Model):
         return f'[{self.pk}] - {self.title}'
 
     def get_absolute_url(self):
-        return f'/main/team'
+        return f'/brain/{self.pk}/main'
+
+
 
 
 # 유저 프로필
@@ -41,6 +47,7 @@ class Profile(models.Model):
 class Channel(models.Model):
     ChannelType = models.TextChoices("ChannelType", "DOCS BRAINSTORM ARGUMENT THREAD")
     name = models.CharField(null=False, blank=False, max_length=50)
+    disc = models.CharField(null=True, blank=True, max_length=200)
     type = models.CharField(null=False, blank=False, max_length=50, choices=ChannelType.choices)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -49,7 +56,10 @@ class Channel(models.Model):
     team = models.ForeignKey(Team, null=False, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'[{self.pk}] - {self.name}'
+        return f'[{self.type}] {self.name}'
+
+    def get_absolute_url(self):
+        return f'/brain/{self.team.pk}/channel/{self.pk}'
 
 
 # 채널 내 글
@@ -78,6 +88,25 @@ class Post(models.Model):
     def __str__(self):
         return f'[{self.pk}] - {self.title}'
 
+    def get_absolute_url(self):
+        return f'/brain/{self.channel.team.pk}/channel/{self.channel.pk}'
+
+    def get_markdown_docs_content(self):
+        return markdown(self.content)
+
+    def get_average_star(self):
+        stars = Star.objects.filter(post=self)
+        average = 0
+        if stars.exists():
+            average = stars.aggregate(Avg('rate'))['rate__avg']
+        return average
+
+    def get_comments_count(self):
+        comments = Comment.objects.filter(post=self)
+        length = 0
+        if comments.exists():
+            length = len(comments)
+        return length
 
 # 글의 코멘트
 class Comment(models.Model):
@@ -94,6 +123,8 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'[{self.pk}]'
+
+
 
 # 글의 별점
 class Star(models.Model):

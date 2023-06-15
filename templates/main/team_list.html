@@ -1,0 +1,53 @@
+{% extends 'main/base.html' %}
+
+{% block main_area %}
+{% load static %}
+    <div class="container my-3">
+        <div class="row">
+            <div class="col-md-12 col-lg-12">
+                <h1>Your Team</h1>
+                {% if user.is_authenticated %}
+                    <a class="btn btn-primary btn-sm float-right" href="/main/create_team/" role="botton">
+                    <i class="fas fa-pen"></i> 팀 만들기</a>
+                {% endif %}
+                <br>
+                <hr>
+                <div class="card mb-4">
+                    {% for team in teams %}
+                        <div class="row team-list-box" style="margin: 2%">
+                            <div class="col-md-3 col-lg-3" style="text-align:center">
+                                {% if team.thumbnail %}
+                                    <img class="card-img-top" src="{{team.thumbnail.url}}" alt="Card image cap" style="width:160px; height:120px;">
+                                {% else %}
+                                    <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap" style="width:160px; height:120px;">
+                                {% endif %}
+                            </div>
+                            <div class="col-md-9 col-lg-9">
+
+                                <h2>
+                                    <img src="{% static 'images/house-fill.svg' %}" style="width:30px; height:30px; cursor:pointer"
+                                    alt="https://icons.getbootstrap.com/icons/house-fill/"
+                                    onclick="go_team( '{{ team.get_absolute_url }}' )">
+                                    {{ team.title }}
+                                </h2>
+                                <hr>
+                                <p>{{ team.disc }}</p>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p>No teams found.</p>
+                    {% endfor %}
+                </div>
+
+            </div>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        function go_team(url){
+            console.log('URL', url)
+            location.href = url
+        }
+    </script>
+{% endblock %}

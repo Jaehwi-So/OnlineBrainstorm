@@ -1,0 +1,59 @@
+{% extends 'brain/brain-base.html' %}
+
+{% block main_brain_area %}
+    {% load static %}
+    <div class="col-md-9 col-lg-9">
+
+
+        <!-- Categories Widget -->
+        <div class="card my-4">
+            <div class="row">
+                <div class="col-md-12 col-lg-12" style="padding:2%;">
+                    <div style="background-color:rgba(0,0,0,0.03); padding:2%">
+                        <h1 style="text-align:center">{{ channel.name }}</h1>
+                        <h4 style="text-align:center; color:#505050">{{ channel.disc }}</h4>
+                        {% if posts %}
+                            <a class="btn btn-primary btn-sm float-right" href="/brain/{{ team.pk }}/channel/{{ channel.pk }}/update_post/{{ posts.0.pk }}" role="botton">
+                            <i class="fas fa-pen"></i>문서 수정</a>
+                        {% else %}
+                            <a class="btn btn-primary btn-sm float-right" href="/brain/{{ team.pk }}/channel/{{ channel.pk }}/create_post" role="botton">
+                            <i class="fas fa-pen"></i>문서 작성</a>
+                        {% endif %}
+                        <br><br>
+                    </div>
+                    <hr>
+                    {% if posts %}
+                        <div style="padding:2%">
+                            <h2 style="text-align:center; color:darkslateblue" >{{ posts.0.title }}</h2>
+                            <br>
+                            <table class="table">
+                                <tr>
+                                    <th>최종 수정일</th>
+                                    <td>{{ posts.0.updated_at }}</td>
+                                </tr>
+                                <tr>
+                                    <th>최종 편집자</th>
+                                    <td>{{ posts.0.user.email }} </td>
+                                </tr>
+                            </table>
+                            <hr><br>
+                            <div style="border:1px dotted black; padding:2%;">
+                                {{ posts.0.docs_content | safe}}
+
+                                <br><br><hr><br><br>
+                                {% if posts.0.image %}
+                                    <img class="card-img-top" src="{{posts.0.image.url}}" alt="Card image cap">
+                                {% endif %}
+                            </div>
+
+
+                        </div>
+
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+    {% include 'brain/sidebar.html' %}
+{% endblock %}

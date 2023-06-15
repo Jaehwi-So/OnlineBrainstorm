@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'brainservice',
     'mainservice',
     'markdownx',
+    'crispy_bootstrap4',
+    'crispy_forms',
     "django.contrib.sites",
     'allauth',
     'allauth.account',
@@ -147,3 +149,4 @@ STATICFILES_DIRS = [
 # STATIC_ROOT = os.path.join(BASE_DIR, "static")
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, '_media')
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

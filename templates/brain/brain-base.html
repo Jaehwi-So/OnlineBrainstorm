@@ -1,0 +1,39 @@
+{% extends 'main/base.html' %}
+
+
+{% block main_area %}
+
+{% load static %}
+    <div style="width:80%; margin:auto">
+        <div class="row">
+            <div class="col-md-12 col-lg-12">
+                <div class="row" style="margin: 2%">
+                    <div class="col-md-2 col-lg-2" style="text-align:center">
+                        {% if team.thumbnail %}
+                            <img class="card-img-top" src="{{team.thumbnail.url}}" alt="Card image cap" style="width:160px; height:120px;">
+                        {% else %}
+                            <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap" style="width:160px; height:120px;">
+                        {% endif %}
+                    </div>
+                    <div class="col-md-10 col-lg-10">
+                        <h1>
+                            {{ team.title }}
+                        </h1>
+                        <p>{{ team.disc }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+
+            {% block main_brain_area %}
+
+            {% endblock %}
+
+        </div>
+
+
+
+    </div>
+{% endblock %}

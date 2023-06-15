@@ -20,11 +20,11 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path('markdownx/', include('markdownx.urls')),
-    # path("brain/", include('brainservice.urls')),
+    path("brain/", include('brainservice.urls')),
     path('main/', include('mainservice.urls')),
     path('accounts/', include('allauth.urls')),
+    path("admin/", admin.site.urls),
+    path('markdownx/', include('markdownx.urls')),
     path('', include('mainservice.urls')),
 ]
 

@@ -1,0 +1,10 @@
+{% extends 'main/base.html' %}
+
+{% block main_area %}
+  <script>
+    alert("{{ message }}");
+    var url = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "{{ href }}";
+    window.location.href = url;
+  </script>
+{% endblock %}
+

@@ -27,13 +27,16 @@ class Invite(models.Model):
 
     def inviting_info(self):
         if self.is_accept == True:
-            accept = "수락"
+            accept = "수락완료"
         elif self.is_accept == False:
-            accept = "거절"
+            accept = "거절완료"
         else:
             accept = "미확인"
 
-        return f'[{accept}][{self.team.title}]{self.from_user.email} -> {self.to_user.email}'
+        return accept
 
     def get_absolute_url(self):
         return f'/main/invite'
+
+    def created_at_datetime(self):
+        return self.created_at.strftime('%Y-%m-%d %H:%M:%S')

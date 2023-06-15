@@ -4,28 +4,67 @@
     <div class="container my-3">
         <div class="row">
             <div class="col-md-12 col-lg-12">
-                <h1>Invite</h1>
-                <br>
+                <h1>Invite Info</h1>
                 {% if user.is_authenticated %}
                     <a class="btn btn-primary btn-sm float-right" href="/main/create_invite/" role="botton">
-                    <i class="fas fa-pen"></i>Make New Invite!!</a>
+                    <i class="fas fa-pen"></i> 팀원 초대하기</a>
                 {% endif %}
                 <br>
                 <hr>
-                <div class="card mb-4">
-                    보낸 초대
-                    {% for from_inv in from_invite %}
-                        <p>{{ from_inv.inviting_info }}</p>
-                    {% empty %}
-                        <p>보낸 초대가 없습니다.</p>
-                    {% endfor %}
+                <div class="card mb-4" style="text-align:center; margin:auto; padding:10px;">
+                    <h3>보낸 초대</h3>
+                    <table class="table">
+                        <tr style="background-color:rgba(0,0,0,0.1)">
+                            <th style="width:25%">날짜</th>
+                            <th style="width:30%">팀</th>
+                            <th style="width:25%">초대 대상</th>
+                            <th style="width:20%">수락여부</th>
+                        </tr>
+                        {% for from_inv in from_invite %}
+                            <tr>
+                                <td>{{ from_inv.created_at_datetime }}</td>
+                                <td>{{ from_inv.team.title }}</td>
+                                <td>{{ from_inv.to_user.email }}</td>
+                                <td>{{ from_inv.inviting_info }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4">보낸 초대가 없습니다.</td>
+                            </tr>
 
-                    받은 초대
-                    {% for to_inv in to_invite %}
-                        <p>{{ to_inv.inviting_info }}</p>
-                    {% empty %}
-                        <p>받은 초대가 없습니다.</p>
-                    {% endfor %}
+                        {% endfor %}
+                    </table>
+
+                    <h3>받은 초대</h3>
+                    <table class="table">
+                        <tr style="background-color:rgba(0,0,0,0.1)">
+                            <th style="width:25%">날짜</th>
+                            <th style="width:30%">팀</th>
+                            <th style="width:25%">초대자</th>
+                            <th style="width:20%" colspan="2">수락</th>
+                        </tr>
+                        {% for to_inv in to_invite %}
+                            <tr>
+                                <td>{{ to_inv.created_at_datetime }}</td>
+                                <td>{{ to_inv.team.title }}</td>
+                                <td>{{ to_inv.from_user.email }}</td>
+                                {% if to_inv.inviting_info == '미확인' %}
+                                    <td><b style="cursor:pointer" onclick="submit_invite({{ to_inv.id }}, true)">수락하기</b></td>
+                                    <td><b style="cursor:pointer" onclick="submit_invite({{ to_inv.id }}, false)">거절하기</b></td>
+                                {% else %}
+                                    <td colspan="2">{{ to_inv.inviting_info }}</td>
+                                {% endif %}
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4">받은 초대가 없습니다.</td>
+                            </tr>
+
+                        {% endfor %}
+                    </table>
+
+
+
                 </div>
 
             </div>
@@ -33,4 +72,41 @@
             </div>
         </div>
     </div>
+    <script>
+        function submit_invite(id, isAccept){
+            var url = '/main/invite_accept/' + id + '/';  //
+            var data = {
+                is_accept: isAccept,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            };
+
+            fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': data.csrfmiddlewaretoken
+            },
+            body: JSON.stringify(data)
+            })
+            .then(response => {
+                console.log(response.status)
+                if(response.status == 200){
+                    alert("완료되었습니다.")
+                    location.reload();
+                }
+                else{
+                    alert("문제가 발생했습니다.")
+                    location.reload();
+                }
+
+            })
+            .catch(error => {
+                alert("문제가 발생했습니다.")
+                location.reload();
+            });
+
+
+        }
+
+    </script>
 {% endblock %}
