@@ -31,16 +31,16 @@ class Team(models.Model):
 
 # 유저 프로필
 class Profile(models.Model):
-    name = models.CharField(max_length=50, null=False, blank=False)
-    email = models.CharField(max_length=50, null=False, blank=False, unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    thumbnail = models.ImageField(upload_to='brainservice/images/%Y/%m/%d/', blank=True, null=True)
 
     # Profile <-> User 1:1
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'[{self.pk}] - {self.user.pk}-{self.name}'
+
+    def get_absolute_url(self):
+        return f'/main'
 
 
 # 팀 내 개설 채널

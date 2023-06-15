@@ -23,11 +23,36 @@ class MainPage(IsTeamMemberRequiredMixin, TemplateView):
         team_pk = self.kwargs.get('team_pk')
         team = get_object_or_404(Team, pk=team_pk)
         channels = Channel.objects.filter(team=team_pk)
+        if channels.exists():
+            main_article = channels.order_by('pk').first()
+            if main_article:
+                context['main_article'] = main_article
+                main_article_post = Post.objects.filter(channel=main_article.pk).first()
+                if main_article_post:
+                    context['main_article_post'] = main_article_post
+
         context['team'] = team
         context['channels'] = channels
+
         return context
 
-class ChannelCreate(LoginRequiredMixin, CreateView):
+class MemberInfo(IsTeamMemberRequiredMixin, TemplateView):
+    template_name = 'brain/member_info.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        team_pk = self.kwargs.get('team_pk')
+        team = get_object_or_404(Team, pk=team_pk)
+        channels = Channel.objects.filter(team=team_pk)
+        members = team.users.all()
+
+        context['team'] = team
+        context['channels'] = channels
+        context['members'] = members
+
+        return context
+
+
+class ChannelCreate(IsTeamMemberRequiredMixin, CreateView):
     model = Channel
     fields = ['name', 'type', 'disc']
     template_name = 'brain/channel_form.html'

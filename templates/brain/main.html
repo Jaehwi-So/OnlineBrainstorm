@@ -6,10 +6,37 @@
 
 
     <!-- Categories Widget -->
-    <div class="card my-4">
-        sssss<br>
-        sqsqsq
-    </div>
+        <div class="card my-4">
+            {% if main_article %}
+            <div class="row">
+                <div class="col-md-12 col-lg-12" style="padding:2%;">
+                    <div style="background-color:rgba(0,0,0,0.03); padding:2%">
+                        <h1 style="text-align:center">{{ main_article.name }}</h1>
+                        <h4 style="text-align:center; color:#505050">{{ main_article.disc }}</h4>
+                        <br><br>
+                    </div>
+                    <hr>
+                    {% if main_article_post %}
+                        <div style="padding:2%">
+                            <h2 style="text-align:center; color:darkslateblue" >{{ main_article_post.title }}</h2>
+                            <br>
+
+                            <hr><br>
+                            <div style="border:1px dotted black; padding:2%;">
+                                {{ main_article_post.docs_content | safe}}
+
+                                <br><br><hr><br><br>
+                                {% if main_article_post.image %}
+                                    <img class="card-img-top" src="{{main_article_post.image.url}}" alt="Card image cap">
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
 </div>
 {% include 'brain/sidebar.html' %}
 {% endblock %}

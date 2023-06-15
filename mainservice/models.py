@@ -40,3 +40,6 @@ class Invite(models.Model):
 
     def created_at_datetime(self):
         return self.created_at.strftime('%Y-%m-%d %H:%M:%S')
+
+
+

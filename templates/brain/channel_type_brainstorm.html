@@ -88,7 +88,11 @@
                                 </div>
                                 <hr>
 
-                                <img class="rounded-circle" src="http://placehold.it/50x50" alt="" width="40px" height="40px" style="display:inline;">
+                                {% if post.user.profile.thumbnail %}
+                                    <img class="rounded-circle" src="{{ post.user.profile.thumbnail.url }}" alt="" width="50px" height="50px" style="display:inline;">
+                                {% else %}
+                                    <img class="rounded-circle" src="http://placehold.it/50x50" alt="" width="50px" height="50px" style="display:inline;">
+                                {% endif %}
                                 <b class="mt-0">&nbsp;{{ post.user.username }}</b>
                                 <small class="text-muted">({{ post.user.email }}) </small><br>
                                 <small class="text-muted">{{ post.created_at }}</small>

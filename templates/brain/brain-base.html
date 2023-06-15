@@ -17,7 +17,7 @@
                     </div>
                     <div class="col-md-10 col-lg-10">
                         <h1>
-                            {{ team.title }}
+                            <a href="{{ team.get_absolute_url }}">{{ team.title }}</a>
                         </h1>
                         <p>{{ team.disc }}</p>
                     </div>

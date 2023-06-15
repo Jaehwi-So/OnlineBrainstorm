@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, TemplateView
 
-from brainservice.models import Team
+from brainservice.models import Team, Channel, Post, Profile
 from mainservice.forms import InviteForm, InviteResponseForm
 from mainservice.models import Invite
 import json
@@ -53,6 +53,25 @@ class TeamCreate(LoginRequiredMixin, CreateView):
             form.save()  # Team 객체를 먼저 저장하여 id 할당
             users = [current_user]
             form.instance.users.set(users)
+
+            channel = Channel(name="TEAM MAIN ARTICLE", disc="대문 글을 편집하세요", type="DOCS", team=form.instance)
+            channel.save()
+            content = '''<h1>Welcome!!</h1>
+                    <br><hr><br>
+                    <h2>DOCS</h2>
+                    <p>마크다운 기반의 이미지가 포함된 문서를 작성할 수 있습니다.</p>
+                    <hr>
+                    <h2>THREAD</h2>
+                    <p>주제에 대한 대화를 진행하고, 메모를 남겨둘 수 있습니다.</p>
+                    <hr>
+                    <h2>BRAINSTORM</h2>
+                    <p>주제에 대한 생각나는 의견을 자유롭게 말해보세요! 댓글로 소통하고, 별점을 매기며 좋은 의견을 뽑을 수 있어요. 별점이 가장 높은 상위 3개가 상단에 뽑히게 됩니다.</p>
+                    <hr>
+                    <h2>ARGUMENT</h2>
+                    <p>주제에 대한 찬반토론을 해보세요. 극명히 의견이 갈릴 것 같은 난제는 끝장토론을 해야 재격입니다.</p>'''
+
+            post = Post(title="새로운 팀을 만든 것을 축하드립니다!", docs_content=content, channel=channel, user=current_user)
+            post.save()
             return super(TeamCreate, self).form_valid(form)
         else:
             return redirect('/main')
@@ -143,3 +162,34 @@ def invite_accept(request, pk):
             return HttpResponse(status=404)
     else:
         raise PermissionDenied
+
+
+
+class InsertProfile(LoginRequiredMixin, CreateView):
+    model = Profile
+    fields = ['thumbnail']
+    template_name = 'main/profile_form.html'   #템플릿 설정
+
+    def form_valid(self, form):
+        current_user = self.request.user
+        if current_user.is_authenticated:
+            form.instance.user = current_user
+            form.save()
+            return super(InsertProfile, self).form_valid(form)
+        else:
+            return redirect('/main')
+
+
+class ModifyProfile(LoginRequiredMixin, UpdateView):
+    model = Profile
+    fields = ['thumbnail']
+    template_name = 'main/profile_form.html'  # 템플릿 설정
+    def form_valid(self, form):
+        current_user = self.request.user
+        if current_user.is_authenticated:
+            return super(ModifyProfile, self).form_valid(form)
+        else:
+            return redirect('/main')
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(UpdateView, self).dispatch(request, *args, **kwargs)
