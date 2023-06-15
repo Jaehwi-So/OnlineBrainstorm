@@ -61,6 +61,9 @@ class Channel(models.Model):
     def get_absolute_url(self):
         return f'/brain/{self.team.pk}/channel/{self.pk}'
 
+    def created_at_datetime(self):
+        return self.created_at.strftime('%Y-%m-%d')
+
 
 # 채널 내 글
 class Post(models.Model):

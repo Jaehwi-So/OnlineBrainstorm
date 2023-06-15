@@ -5,19 +5,31 @@
     <div class="card my-4" style="padding:2%">
 
         <h5 class="card-header" style="text-align:center">MEMBERS</h5>
-        <a class="btn btn-primary" href="/brain/{{ team.pk }}/members/" role="button"><i class="fas fa-pen"></i> 멤버 보기</a>
+        <a class="btn btn-secondary" href="/brain/{{ team.pk }}/members/" role="button">멤버 보기</a>
+        <hr>
         <h5 class="card-header" style="text-align:center">CHANNELS</h5>
-        <a class="btn btn-primary" href="/brain/{{ team.pk }}/create_channel/" role="button"><i class="fas fa-pen"></i> 채널 생성</a>
+        <a class="btn btn-primary" href="/brain/{{ team.pk }}/create_channel/" role="button">채널 생성</a>
 
 
         <div class="card-body">
             <div class="row">
                 <div class="col-lg-12">
-                    <ul class="list-unstyled mb-0">
+                    <ul class="list-unstyled mb-0" >
                         {% for channel in channels %}
                             <li>
-                                <a href="{{ channel.get_absolute_url }}">{{ channel }}</a>
+                                <a href="{{ channel.get_absolute_url }}"
+                                   style="color:slateblue; font-size:12px;">
+
+                                    <b style="color:midnightblue;font-size:13px;">| {{ channel.type }} |</b>
+                                    {{ channel.created_at_datetime }}<br>
+                                    <b style="color:#1b1e21; font-size:17px;">{{ channel.name }}</b>
+
+
+                                </a>
+                                <hr style="margin:5px;">
+
                             </li>
+
                         {% endfor %}
 
                     </ul>
