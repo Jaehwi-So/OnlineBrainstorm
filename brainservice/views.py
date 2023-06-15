@@ -11,6 +11,8 @@ from brainservice.forms import ThreadForm
 from brainservice.models import Team, Channel, Post, Star, Comment
 import json
 
+from brainservice.util import depth_first_search
+
 
 # Create your views here.
 
@@ -69,13 +71,19 @@ class ChannelPage(IsTeamMemberRequiredMixin, TemplateView):
         channel = get_object_or_404(Channel, pk=channel_pk)
         channels = Channel.objects.filter(team=self.kwargs.get('team_pk'))
         team = get_object_or_404(Team, pk=self.kwargs.get('team_pk'))
-        # 별점 기준으로 상위 3개 게시물 가져오기
-        top_posts = Post.objects.filter(channel=channel_pk).annotate(average_rate=Avg('star__rate')).order_by(
-            '-average_rate', '-created_at')[:3]
-        # 나머지 게시물 가져오기
-        remaining_posts = Post.objects.filter(channel=channel_pk).exclude(pk__in=top_posts.values('pk')).order_by(
-            '-created_at')
-        posts = list(top_posts) + list(remaining_posts)
+        if channel.type == 'BRAINSTORM':
+            # 별점 기준으로 상위 3개 게시물 가져오기
+            top_posts = Post.objects.filter(channel=channel_pk).annotate(average_rate=Avg('star__rate')).order_by(
+                '-average_rate', '-created_at')[:3]
+            # 나머지 게시물 가져오기
+            remaining_posts = Post.objects.filter(channel=channel_pk).exclude(pk__in=top_posts.values('pk')).order_by(
+                '-created_at')
+            posts = list(top_posts) + list(remaining_posts)
+        elif channel.type == 'ARGUMENT':
+            channel_posts = Post.objects.filter(channel=channel_pk).order_by('arg_type', '-created_at')
+            posts = depth_first_search(channel_posts)
+        else:
+            posts = Post.objects.filter(channel=channel_pk).order_by('-created_at')
         context['thread_form'] = ThreadForm
         context['team'] = team
         context['channels'] = channels
@@ -218,3 +226,34 @@ def get_comment_list(request, post_pk):
         comment_list.append(comment_data)
 
     return JsonResponse(data=comment_list, safe=False, status=200)
+
+
+
+def argument_post_input(request, team_pk, channel_pk, pk):
+    if request.user.is_authenticated:
+
+        if request.method == 'POST':
+            try:
+                request_data = json.loads(request.body)
+                user = request.user
+                channel = get_object_or_404(Channel, pk=channel_pk)
+                title = request_data.get('title')
+                content = request_data.get('content')
+                arg_type = request_data.get('arg_type')
+
+                if pk == 0:
+                    arg_tree_level = 0
+                    post = None
+                else:
+                    post = get_object_or_404(Post, pk=pk)
+                    arg_tree_level = post.arg_tree_level + 1
+                post = Post(title=title, content=content, arg_type=arg_type, user=user, channel=channel,
+                            arg_tree_level=arg_tree_level, arg_tree_parent=post)
+                post.save()
+                return HttpResponse(status=200)
+            except json.JSONDecodeError:
+                return HttpResponse(status=500)
+        else:
+            return HttpResponse(status=404)
+    else:
+        raise PermissionDenied

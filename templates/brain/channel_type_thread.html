@@ -38,7 +38,7 @@
                         <div class="card my-4">
                           <h5 class="card-header">Leave a Thread</h5>
                           <div class="card-body" >
-                            <form method="POST" action="{{ channel.get_absolute_url }}/create_post_tread">
+                            <form method="POST" action="{{ channel.get_absolute_url }}/create_post_tread/">
                               {% csrf_token %}
                               <div class="form-group">
                                   {{ thread_form | crispy }}

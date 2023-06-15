@@ -140,7 +140,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" onclick="closeRatingModal()">닫기</button>
-            <button type="button" class="btn btn-primary" onclick="saveRating()">저장</button>
+            <button type="button" class="btn btn-primary" onclick="saveRating()">완료</button>
           </div>
         </div>
       </div>
@@ -168,7 +168,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" onclick="closeCommentModal()">취소</button>
-            <button type="button" class="btn btn-primary" onclick="saveComment()">저장</button>
+            <button type="button" class="btn btn-primary" onclick="saveComment()">완료</button>
           </div>
         </div>
       </div>
@@ -206,7 +206,7 @@
             console.log("별점:", rating);
             console.log("postID:", postID);
 
-            var url = '/brain/{{team.pk}}/channel/{{ channel.pk }}/post_star/' + postID;  //
+            var url = '/brain/{{team.pk}}/channel/{{ channel.pk }}/post_star/' + postID +'/';  //
             var data = {
                 rate: rating,
                 csrfmiddlewaretoken: '{{ csrf_token }}'
@@ -277,7 +277,7 @@
             console.log("postID:", postID);
 
 
-            var url = '/brain/post/' + postID + '/insert_comment';  //
+            var url = '/brain/post/' + postID + '/insert_comment/';  //
             var data = {
                 content: commentText,
                 csrfmiddlewaretoken: '{{ csrf_token }}'
