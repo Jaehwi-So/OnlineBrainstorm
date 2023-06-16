@@ -26,7 +26,7 @@
 
                         <div class="member_box">
                             <div class="media-body" style="text-align:center; margin:1.25%;">
-                                <div style="width:100%; height:200px; margin:auto;">
+                                <div style="width:100%; height:300px; margin:auto;">
                                   {% if member.profile.thumbnail %}
                                       <img src="{{ member.profile.thumbnail.url}}" alt="" width="100%" height="100%">
                                   {% else %}
@@ -35,9 +35,9 @@
                                   {% endif %}
 
                                 </div>
-
-                                <b class="mt-0">&nbsp;{{ member.username }}</b><br>
-                                <small class="text-muted">{{ member.email }} </small>
+                                <hr>
+                                <h4 class="mt-0">&nbsp;{{ member.username }}</h4>
+                                <h5 class="text-muted">{{ member.email }} </h5>
                                 <hr>
                             </div>
                         </div>

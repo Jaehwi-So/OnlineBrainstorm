@@ -114,7 +114,7 @@
                         <h1 style="text-align:center">{{ channel.name }}</h1>
                         <h4 style="text-align:center; color:#505050">{{ channel.disc }}</h4>
                             {% if not posts %}
-                                <a class="btn btn-primary btn-sm float-right" onclick="openArguFormModal(true, null)" role="botton">
+                                <a class="btn btn-primary btn-sm float-right" onclick="openArguFormModal(true, null)" role="button">
                                 <i class="fas fa-pen"></i> 아이디어 작성</a>
                             {% endif %}
 
@@ -290,7 +290,7 @@
             var arguText = document.getElementById('arguText').value;
             var title = document.getElementById('arguTitle').value;
             var agreeType = null
-            if('{{ posts }}'){
+            if({{ posts|length }} ){
                 agreeType = document.getElementById('agreeType').value;
             }
             console.log('content', arguText)
