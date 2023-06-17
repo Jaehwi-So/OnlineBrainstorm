@@ -1,6 +1,10 @@
 # OnlineBrainstorm
 2023 클라우드프로그래밍 기말 프로젝트   
 프로젝트 협업을 위한 브레인스토밍 플랫폼
+---
+
+## 사이트 URL
+http://onlinebrainstorm-app.apps.openlab-06.kr/
 
 ---
 

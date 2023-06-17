@@ -2,6 +2,6 @@
 applications:
 - name: onlinebrainstorm-app
   buildpack: paketo-buildpacks/python
-  memory: 512M
+  memory: 256M
   instances: 1
   command: waitress-serve --port=8080 OnlineBrainstorm.wsgi:application
